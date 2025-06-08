@@ -18,9 +18,10 @@ RSpec.describe RagEmbeddings do
 
   it "creates and sets a C embedding object" do
     embedding = RagEmbeddings.embed(text1)
-    obj = RagEmbeddings::Embedding.new
-    expect { obj.set(embedding) }.not_to raise_error
+    obj = RagEmbeddings::Embedding.from_array(embedding)
+    expect(obj).to be_a(RagEmbeddings::Embedding)
   end
+
 
   it "inserts and reads embeddings in sqlite" do
     emb = RagEmbeddings.embed(text1)
@@ -36,10 +37,8 @@ RSpec.describe RagEmbeddings do
   it "computes cosine similarity between embeddings" do
     emb1 = RagEmbeddings.embed(text1)
     emb2 = RagEmbeddings.embed(text2)
-    obj1 = RagEmbeddings::Embedding.new
-    obj2 = RagEmbeddings::Embedding.new
-    obj1.set(emb1)
-    obj2.set(emb2)
+    obj1 = RagEmbeddings::Embedding.from_array(emb1)
+    obj2 = RagEmbeddings::Embedding.from_array(emb2)
     sim = obj1.cosine_similarity(obj2)
     expect(sim).to be_a(Float)
     expect(sim).to be <= 1.0

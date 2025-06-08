@@ -1,6 +1,6 @@
 # 💎 Rag Embeddings  
 
-[![Gem Version](https://badge.fury.io/rb/rag_embeddings.svg)](https://badge.fury.io/rb/rag_embeddings)
+[![Gem Version](https://badge.fury.io/rb/rag_embeddings.svg?icon=si%3Arubygems)](https://badge.fury.io/rb/rag_embeddings)
 
 **rag_embeddings** is a native Ruby library for efficient storage and comparison of AI-generated embedding vectors (float arrays) using high-performance C extensions. It is designed for seamless integration with external LLMs (Ollama, OpenAI, Mistral, etc) and works perfectly for RAG (Retrieval-Augmented Generation) applications.
 
@@ -49,18 +49,25 @@ To run all specs (RSpec required):
 ### 1. Generate an embedding from text
 
 ```ruby
-require "rag_embeddings"
-
 text = "Hello world, this is RAG!"
 embedding = RagEmbeddings.embed(text)
 # embedding is a float array
 ```
+
+The default model is llama3.2 but you can set another one (reload the console as the llm is memoized):
+
+```ruby
+embedding = RagEmbeddings.embed(text, model: 'qwen3:0.6b')
+````
 
 ### 2. Create a C embedding object
 
 ```ruby
 c_embedding = RagEmbeddings::Embedding.from_array(embedding)
 puts "Dimension: #{c_embedding.dim}"
+# Dimension: 1024 # qwen3:0.6b
+# Dimension: 3072 # llama3.2
+
 puts "Ruby array: #{c_embedding.to_a.inspect}"
 ```
 
@@ -102,6 +109,18 @@ puts "Most similar text: #{result.first[1]}, score: #{result.first[2]}"
 ## 🔢 Embeddings dimension
 
 The size of embeddings is dynamic and fits with what the LLM provides.
+
+## ⚡️ Performance
+
+Embedding creation (10000 times): 82 ms
+Cosine similarity (10000 times): 107 ms
+RSS: 186.7 MB
+.
+Memory usage delta: 33.97 MB for 10000 embeddings
+.
+
+Finished in 0.42577 seconds (files took 0.06832 seconds to load)
+2 examples, 0 failures
 
 ## 👷 Requirements
 

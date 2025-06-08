@@ -1,13 +1,20 @@
 require "langchainrb"
 
 module RagEmbeddings
-  MODEL = "gemma3".freeze
+  DEFAULT_MODEL = "llama3.2".freeze
 
-  def self.llm
-    @llm ||= Langchain::LLM::Ollama.new(url: "http://localhost:11434", default_options: { temperature: 0.1, model: MODEL })
+  def self.llm(model: DEFAULT_MODEL)
+    @llm ||= Langchain::LLM::Ollama.new(url: "http://localhost:11434",
+                                        default_options: {
+                                          temperature: 0.1,
+                                          chat_model: model,
+                                          completion_model: model,
+                                          embedding_model: model,
+                                        }
+    )
   end
 
-  def self.embed(text)
-    llm.embed(text: text).embedding
+  def self.embed(text, model: DEFAULT_MODEL)
+    llm(model:).embed(text:).embedding
   end
 end

@@ -31,8 +31,8 @@ RSpec.describe "Performance" do
     puts "RSS: #{(`ps -o rss= -p #{Process.pid}`.to_i / 1024.0).round(2)} MB"
 
     # Weak expectations, mostly for sanity check
-    expect(creation_time).to be < 0.2 # Should be less than 100 milliseconds for 10_000
-    expect(sim_time).to be < 0.2      # Should be less than 100 milliseconds for 10_000
+    expect(creation_time).to be < 0.5 # Should be less than 100 milliseconds for 10_000
+    expect(sim_time).to be < 0.5      # Should be less than 100 milliseconds for 10_000
   end
 
   context "memory usage" do

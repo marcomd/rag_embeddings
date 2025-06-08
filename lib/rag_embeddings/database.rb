@@ -27,9 +27,13 @@ module RagEmbeddings
     # "Raw" search: returns the N texts most similar to the query
     def top_k_similar(query_text, k: 5)
       query_embedding = RagEmbeddings.embed(query_text)
+      raise "Wrong embedding size #{query_embedding.size}, #{RagEmbeddings::EMBEDDING_DIMENSION} was expected! Change the configuration." unless query_embedding.size == RagEmbeddings::EMBEDDING_DIMENSION
+
       query_obj = RagEmbeddings::Embedding.from_array(query_embedding)
 
       all.map do |id, content, emb|
+        raise "Wrong embedding size #{query_embedding.size}, #{RagEmbeddings::EMBEDDING_DIMENSION} was expected! Change the configuration." unless emb.size == RagEmbeddings::EMBEDDING_DIMENSION
+
         emb_obj = RagEmbeddings::Embedding.from_array(emb)
         similarity = emb_obj.cosine_similarity(query_obj)
         [id, content, similarity]

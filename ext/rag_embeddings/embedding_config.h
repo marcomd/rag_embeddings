@@ -1,0 +1,1 @@
+#define EMBEDDING_DIMENSION 3072 // <--- this must be the same as what is set in ruby lib/rag_embeddings/config.rb

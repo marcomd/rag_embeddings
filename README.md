@@ -99,6 +99,18 @@ puts "Most similar text: #{result.first[1]}, score: #{result.first[2]}"
 - Embedding provider: switch model/provider in engine.rb (Ollama, OpenAI, etc)
 - Database: set the SQLite file path as desired
 
+# 🔢 Embeddings dimension
+
+In the previous version the size of embeddings was dynamic. Now the size of embeddings is static to use the RUBY_TYPED_EMBEDDABLE flag
+
+- the size of embeddings is currently set to 3072 and it's defined in two places:
+  - c side is defined in `ext/rag_embeddings/embedding_config.h`
+  - ruby side is defined in `lib/rag_embeddings/config.rb`
+
+Remember to recompile the c extension after changing the size:
+
+`rake compile`
+
 ## 👷 Requirements
 
 - Ruby >= 3.3

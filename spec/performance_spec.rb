@@ -6,7 +6,7 @@ RSpec.describe "Performance" do
   let(:text1) { "Performance test one" }
   let(:text2) { "Performance test two" }
   let(:n) { 10_000 }
-  let(:embedding_size) { 3072 }
+  let(:embedding_size) { RagEmbeddings::EMBEDDING_DIMENSION }
 
   let(:emb1) { Array.new(embedding_size) { rand } }
   let(:emb2) { Array.new(embedding_size) { rand } }

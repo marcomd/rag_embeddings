@@ -99,7 +99,7 @@ puts "Most similar text: #{result.first[1]}, score: #{result.first[2]}"
 - Embedding provider: switch model/provider in engine.rb (Ollama, OpenAI, etc)
 - Database: set the SQLite file path as desired
 
-# 🔢 Embeddings dimension
+## 🔢 Embeddings dimension
 
 In the previous version the size of embeddings was dynamic. Now the size of embeddings is static to use the RUBY_TYPED_EMBEDDABLE flag
 

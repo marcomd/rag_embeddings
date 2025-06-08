@@ -99,6 +99,10 @@ puts "Most similar text: #{result.first[1]}, score: #{result.first[2]}"
 - Embedding provider: switch model/provider in engine.rb (Ollama, OpenAI, etc)
 - Database: set the SQLite file path as desired
 
+## 🔢 Embeddings dimension
+
+The size of embeddings is dynamic and fits with what the LLM provides.
+
 ## 👷 Requirements
 
 - Ruby >= 3.3

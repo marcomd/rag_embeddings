@@ -3,3 +3,7 @@
 Makefile
 mkmf.log
 /build/
+.bundle
+.DS_Store
+.idea
+*.gem

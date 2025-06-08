@@ -1,4 +1,0 @@
----
-BUNDLE_PATH: "../mybundle_rag_embeddings"
-BUNDLE_WITHOUT: "x86_64"
-BUNDLE_WITH: "arm64"

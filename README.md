@@ -1,5 +1,7 @@
 # 💎 Rag Embeddings  
 
+[![Gem Version](https://badge.fury.io/rb/rag_embeddings.svg)](https://badge.fury.io/rb/rag_embeddings)
+
 **rag_embeddings** is a native Ruby library for efficient storage and comparison of AI-generated embedding vectors (float arrays) using high-performance C extensions. It is designed for seamless integration with external LLMs (Ollama, OpenAI, Mistral, etc) and works perfectly for RAG (Retrieval-Augmented Generation) applications.
 
 - **C extension for maximum speed** in cosine similarity and vector allocation

@@ -22,27 +22,30 @@
 
 ---
 
+## 🌍 Real-world Use Cases
+
+- **Question Answering over Documents:** Instantly search and retrieve the most relevant document snippets from thousands of articles, FAQs, or customer support logs in your Ruby app.
+- **Semantic Search for E-commerce:** Power product search with semantic understanding, returning items similar in meaning, not just keywords.
+- **Personalized Recommendations:** Find related content (articles, products, videos) by comparing user preferences and content embeddings.
+- **Knowledge Base Augmentation:** Use with OpenAI or Ollama to enhance chatbots, letting them ground answers in your company’s internal documentation or wiki.
+- **Fast Prototyping for AI Products:** Effortlessly build MVPs for RAG-enabled chatbots, semantic search tools, and AI-driven discovery apps—all in native Ruby.
+
+---
+
 ## 🔧 Installation
 
-Add to your Gemfile:
+Requires a working C compiler!
+
+`gem install rag_embeddings`
+
+Or add to your Gemfile:
 
 ```ruby
 gem "rag_embeddings"
-gem "langchainrb"
-gem "faraday"
-gem "sqlite3"
 ```
 
 bundle install
-rake compile
 
-(Requires a working C compiler!)
-
-## 🏁 Running the test suite
-
-To run all specs (RSpec required):
-
-`bundle exec rspec`
 
 ## 🧪 Practical examples
 
@@ -94,6 +97,78 @@ result = db.top_k_similar("Hello!", k: 1)
 puts "Most similar text: #{result.first[1]}, score: #{result.first[2]}"
 ```
 
+### 5. Batch-index a folder of documents
+
+```ruby
+# load all .txt files
+files = Dir["./docs/*.txt"].map { |f| [File.basename(f), File.read(f)] }
+
+db = RagEmbeddings::Database.new("knowledge_base.db")
+files.each do |name, text|
+  vector = RagEmbeddings.embed(text)
+  db.insert(name, vector)
+end
+
+puts "Indexed #{files.size} documents."
+```
+
+### 6. Simple Retrieval-Augmented Generation (RAG) loop
+
+```ruby
+require "openai"        # or your favorite LLM client
+
+# 1) build or open your vector store
+db = RagEmbeddings::Database.new("knowledge_base.db")
+
+# 2) embed your user question
+client      = OpenAI::Client.new(api_key: ENV.fetch("OPENAI_API_KEY"))
+q_embedding = client.embeddings(
+  parameters: {
+    model: "text-embedding-ada-002",
+    input: "What are the benefits of retrieval-augmented generation?"
+  }
+).dig("data", 0, "embedding")
+
+# 3) retrieve top-3 relevant passages
+results = db.top_k_similar(q_embedding, k: 3)
+
+# 4) build a prompt for your LLM
+context = results.map { |id, text, score| text }.join("\n\n---\n\n")
+prompt  = <<~PROMPT
+  You are an expert.  
+  Use the following context to answer the question:
+
+  CONTEXT:
+  #{context}
+
+  QUESTION:
+  What are the benefits of retrieval-augmented generation?
+PROMPT
+
+# 5) call the LLM for final answer
+response = client.chat(
+  parameters: {
+    model: "gpt-4o",
+    messages: [{ role: "user", content: prompt }]
+  }
+)
+puts response.dig("choices", 0, "message", "content")
+
+```
+
+### 7. In-memory store for fast prototyping
+
+```ruby
+# use SQLite :memory: for ephemeral experiments
+db = RagEmbeddings::Database.new(":memory:")
+
+# insert & search exactly as with a file-backed DB
+db.insert("Quick test", RagEmbeddings.embed("Quick test"))
+db.top_k_similar("Test", k: 1)
+```
+
+---
+
 ## 🏗️ How it works
 
 - Embeddings are managed as dynamic C objects for efficiency (variable dimension).
@@ -106,21 +181,13 @@ puts "Most similar text: #{result.first[1]}, score: #{result.first[2]}"
 - Embedding provider: switch model/provider in engine.rb (Ollama, OpenAI, etc)
 - Database: set the SQLite file path as desired
 
+If you need to customize the c part (`ext/rag_embeddings/embedding.c`), recompile it with:
+
+`rake compile`
+
 ## 🔢 Embeddings dimension
 
 The size of embeddings is dynamic and fits with what the LLM provides.
-
-## ⚡️ Performance
-
-Embedding creation (10000 times): 82 ms
-Cosine similarity (10000 times): 107 ms
-RSS: 186.7 MB
-.
-Memory usage delta: 33.97 MB for 10000 embeddings
-.
-
-Finished in 0.42577 seconds (files took 0.06832 seconds to load)
-2 examples, 0 failures
 
 ## 👷 Requirements
 
@@ -134,6 +201,30 @@ Finished in 0.42577 seconds (files took 0.06832 seconds to load)
 - Always create embeddings with .from_array
 - All memory management is idiomatic and safe
 - For millions of vectors, consider vector DBs (Faiss, sqlite-vss, etc.)
+
+---
+
+## 🏁 Running the test suite
+
+To run all specs (RSpec required):
+
+`bundle exec rspec`
+
+## ⚡️ Performance
+
+`bundle exec rspec spec/performance_spec.rb`
+
+```bash
+Embedding creation (10000 times): 82 ms
+Cosine similarity (10000 times): 107 ms
+RSS: 186.7 MB
+.
+Memory usage delta: 33.97 MB for 10000 embeddings
+.
+
+Finished in 0.42577 seconds (files took 0.06832 seconds to load)
+2 examples, 0 failures
+```
 
 ## 📬 Contact & Issues
 Open an issue or contact the maintainer for questions, suggestions, or bugs.

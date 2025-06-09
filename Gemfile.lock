@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rag_embeddings (0.1.0)
+    rag_embeddings (0.2.0)
       faraday
       langchainrb
       sqlite3

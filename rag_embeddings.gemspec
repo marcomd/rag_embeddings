@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
 
   spec.files         = Dir["README.md", "LICENSE", "lib/**/*.rb", "ext/**/*.{c,rb}", "Rakefile"]
   spec.extensions    = ["ext/rag_embeddings/extconf.rb"]
-  spec.require_paths = ["lib"]
+  spec.require_paths = ["lib", "ext"]
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/marcomd/rag_embeddings"

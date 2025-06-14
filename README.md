@@ -32,19 +32,24 @@
 
 ---
 
+## 👷 Requirements
+
+- Ruby >= 3.3
+- `langchainrb` (for embedding)
+- At the moment `ollama` is used as LLM so it must be active and working, although there are some workarounds
+- `sqlite3` (for storage)
+
 ## 🔧 Installation
 
-Requires a working C compiler!
+Requires a working C compiler in order to build the native extension
 
 `gem install rag_embeddings`
 
-Or add to your Gemfile:
+If you'd rather install it using bundler, add a line for it in your Gemfile (but set the require option to false, as it is a standalone tool):
 
 ```ruby
-gem "rag_embeddings"
+gem "rag_embeddings", require: false
 ```
-
-bundle install
 
 
 ## 🧪 Practical examples
@@ -52,15 +57,15 @@ bundle install
 ### 1. Generate an embedding from text
 
 ```ruby
-text = "Hello world, this is RAG!"
-embedding = RagEmbeddings.embed(text)
+require "rag_embeddings"
+embedding = RagEmbeddings.embed("Hello world, this is RAG!")
 # embedding is a float array
 ```
 
 The default model is llama3.2 but you can set another one (reload the console as the llm is memoized):
 
 ```ruby
-embedding = RagEmbeddings.embed(text, model: 'qwen3:0.6b')
+embedding = RagEmbeddings.embed("Hello world, this is RAG!", model: 'qwen3:0.6b')
 ````
 
 ### 2. Create a C embedding object
@@ -171,10 +176,63 @@ db.top_k_similar("Test", k: 1)
 
 ## 🏗️ How it works
 
-- Embeddings are managed as dynamic C objects for efficiency (variable dimension).
-- The only correct way to construct an embedding object is using .from_array.
-- Langchainrb integration lets you easily change the embedding provider (Ollama, OpenAI, etc).
-- Storage uses local SQLite with embeddings as BLOB, for maximum portability and simplicity.
+**rag_embeddings** combines the simplicity of Ruby with the performance of C to deliver fast vector operations for RAG applications.
+
+### Architecture Overview
+
+The library uses a **hybrid memory-storage approach**:
+
+1. **In-Memory Processing**: All vector operations (cosine similarity calculations, embedding manipulations) happen entirely in memory using optimized C code
+2. **Persistent Storage**: SQLite serves as a simple, portable storage layer for embeddings and associated text
+3. **Dynamic C Objects**: Embeddings are managed as native C structures with automatic memory management
+
+### Key Components
+
+**C Extension (`embedding.c`)**
+- Handles all computationally intensive operations
+- Manages dynamic vector dimensions (adapts to any LLM output size)
+- Performs cosine similarity calculations with optimized algorithms
+- Ensures memory-safe operations with proper garbage collection integration
+
+**Ruby Interface**
+- Provides an intuitive API for vector operations
+- Integrates seamlessly with LLM providers via langchainrb
+- Handles database operations and query orchestration
+
+**SQLite Storage**
+- Stores embeddings as BLOBs alongside their associated text
+- Provides persistent storage without requiring external databases
+- Supports both file-based and in-memory (`:memory:`) databases
+- Enables portable, self-contained applications
+
+### Processing Flow
+
+1. **Text → Embedding**: Generate vectors using your preferred LLM (Ollama, OpenAI, etc.)
+2. **Memory Allocation**: Create C embedding objects with `Embedding.from_array()`
+3. **Storage**: Persist embeddings and text to SQLite for later retrieval
+4. **Query Processing**:
+    - Load query embedding into memory
+    - Compare against stored embeddings using fast C-based cosine similarity
+    - Return top-K most similar results ranked by similarity score
+
+### Why This Design?
+
+**Performance**: Critical operations run in optimized C code, delivering significant speed improvements over pure Ruby implementations.
+
+**Memory Efficiency**: While embeddings are stored in SQLite, all vector computations happen in memory, avoiding I/O bottlenecks during similarity calculations.
+
+**Simplicity**: SQLite eliminates the need for complex vector database setups while maintaining good performance for moderate-scale applications.
+
+**Portability**: The entire knowledge base fits in a single SQLite file, making deployment and backup trivial.
+
+### Performance Characteristics
+
+- **Embedding creation**: ~82ms for 10,000 operations
+- **Cosine similarity**: ~107ms for 10,000 calculations
+- **Memory usage**: ~34MB for 10,000 embeddings
+- **Scalability**: Suitable for thousands to tens of thousands of vectors
+
+For applications requiring millions of vectors, consider specialized vector databases (Faiss, sqlite-vss) while using this library for prototyping and smaller-scale production use.
 
 ## 🎛️ Customization
 
@@ -184,23 +242,6 @@ db.top_k_similar("Test", k: 1)
 If you need to customize the c part (`ext/rag_embeddings/embedding.c`), recompile it with:
 
 `rake compile`
-
-## 🔢 Embeddings dimension
-
-The size of embeddings is dynamic and fits with what the LLM provides.
-
-## 👷 Requirements
-
-- Ruby >= 3.3
-- langchainrb (for embedding)
-- sqlite3 (for storage)
-- A working C compiler
-
-## 📑 Notes
-
-- Always create embeddings with .from_array
-- All memory management is idiomatic and safe
-- For millions of vectors, consider vector DBs (Faiss, sqlite-vss, etc.)
 
 ---
 

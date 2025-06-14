@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-# Specify your gem's dependencies in langchain.gemspec
+# Load the rag_embeddings gem
 gemspec
 
 gem "rake"

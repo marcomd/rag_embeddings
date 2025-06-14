@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v0.2.1 14/06/2025 - Minor fixes
+
+- Fixed an error that occurred when requiring the gem
+- Made minor improvements to the README documentation
+
 ## v0.2.0 09/06/2025 - Added the model selection feature and many improvements on the c extension
 
 - Model selection e.g. `RagEmbeddings.embed(text, model: 'qwen3:0.6b')`

@@ -18,6 +18,7 @@
 - Embedding + text storage in SQLite (BLOB)
 - Retrieve top-K most similar texts to a query using cosine similarity
 - Memory-safe and 100% Ruby compatible
+- ⭐️ Efficient variable-width allocation with embeddable typed data for compact memory usage
 - Plug-and-play for RAG, semantic search, and retrieval AI
 
 ---

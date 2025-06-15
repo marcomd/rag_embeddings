@@ -11,3 +11,5 @@ gem "sqlite3"
 gem "rubocop"
 gem "faraday"
 gem "rspec"
+gem "dotenv", require: false
+gem "debug"

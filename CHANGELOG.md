@@ -1,5 +1,8 @@
 # CHANGELOG
 
+- spec/rag_embeddings_spec.rb now by default uses stubbed embeddings for testing
+- added dotenv and debug gems to the development dependencies
+
 ## v0.2.1 14/06/2025 - Minor fixes
 
 - Fixed an error that occurred when requiring the gem

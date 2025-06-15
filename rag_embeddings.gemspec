@@ -21,4 +21,10 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "sqlite3"
   spec.add_runtime_dependency "langchainrb"
   spec.add_runtime_dependency "faraday"
+
+  spec.add_development_dependency "rake"
+  spec.add_development_dependency "rspec"
+  spec.add_development_dependency "rubocop"
+  spec.add_development_dependency "dotenv"
+  spec.add_development_dependency "debug"
 end

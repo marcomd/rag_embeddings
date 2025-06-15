@@ -185,7 +185,7 @@ The library uses a **hybrid memory-storage approach**:
 
 1. **In-Memory Processing**: All vector operations (cosine similarity calculations, embedding manipulations) happen entirely in memory using optimized C code
 2. **Persistent Storage**: SQLite serves as a simple, portable storage layer for embeddings and associated text
-3. **Dynamic C Objects**: Embeddings are managed as native C structures with automatic memory management
+3. **Dynamic C Objects**: Embeddings are managed as native C structures with automatic memory management using variable-width allocation for each vector
 
 ### Key Components
 

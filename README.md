@@ -255,16 +255,43 @@ To run all specs (RSpec required):
 
 `bundle exec rspec spec/performance_spec.rb`
 
-```bash
-Embedding creation (10000 times): 82 ms
-Cosine similarity (10000 times): 107 ms
-RSS: 186.7 MB
-.
-Memory usage delta: 33.97 MB for 10000 embeddings
-.
+You'll get something like this in random order:
 
-Finished in 0.42577 seconds (files took 0.06832 seconds to load)
-2 examples, 0 failures
+```bash
+Performance test with embedding size: 768
+Embedding creation (10000 times): 19 ms
+Cosine similarity (10000 times): 27 ms
+RSS: 132.3 MB
+
+Memory usage test with embedding size: 768
+Memory usage delta: 3.72 MB for 10000 embeddings
+
+
+Performance test with embedding size: 2048
+Embedding creation (10000 times): 69 ms
+Cosine similarity (10000 times): 73 ms
+RSS: 170.08 MB
+
+Memory usage test with embedding size: 2048
+Memory usage delta: 25.11 MB for 10000 embeddings
+
+
+Performance test with embedding size: 3072
+Embedding creation (10000 times): 98 ms
+Cosine similarity (10000 times): 112 ms
+RSS: 232.97 MB
+
+Memory usage test with embedding size: 3072
+Memory usage delta: 60.5 MB for 10000 embeddings
+
+
+Performance test with embedding size: 4096
+Embedding creation (10000 times): 96 ms
+Cosine similarity (10000 times): 140 ms
+RSS: 275.2 MB
+
+Memory usage test with embedding size: 4096
+Memory usage delta: 92.41 MB for 10000 embeddings
 ```
 
 ## 📬 Contact & Issues

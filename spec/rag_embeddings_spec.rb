@@ -7,6 +7,31 @@ RSpec.describe RagEmbeddings do
   let(:db_path) { "test_embeddings.db" }
   let(:db) { RagEmbeddings::Database.new(db_path) }
 
+  before do
+    unless ENV["ENABLE_INTEGRATION_TEST"] == "true"
+      # How to stub the embeddings for text
+      # 1. Start ollama
+      # 2. From the console:
+      #   - embeddings = RagEmbeddings.embed("Another completely different sentence.")
+      #   - puts embeddings.to_json
+      # 3. Save the output to a file into `spec/fixtures/` with format
+      #   {
+      #     "text": "Another completely different sentence.",
+      #     "embeddings": [-0.0012715843,0.00039926387, ...]
+      #   }
+      #
+
+      %w[text1 text2].each do |var|
+        # Pick embeddings from a file
+        text_embeddings_file = JSON.load_file("spec/fixtures/#{var}_embeddings.json")
+        # Assuming the file contains a JSON object with "embeddings" key
+        text_embeddings_stub = text_embeddings_file.fetch("embeddings", [])
+        # Allow the embed method to return the stubbed embeddings
+        allow(RagEmbeddings).to receive(:embed).with(send(var)).and_return(text_embeddings_stub)
+      end
+    end
+  end
+
   after(:each) { File.delete(db_path) if File.exist?(db_path) }
 
   it "generates an embedding for text" do

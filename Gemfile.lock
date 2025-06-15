@@ -15,13 +15,24 @@ GEM
     baran (0.1.12)
     bigdecimal (3.2.2)
     csv (3.3.5)
+    date (3.4.1)
+    debug (1.10.0)
+      irb (~> 1.10)
+      reline (>= 0.3.8)
     diff-lcs (1.6.2)
+    dotenv (3.1.8)
+    erb (5.0.1)
     faraday (2.13.1)
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
     faraday-net_http (3.4.0)
       net-http (>= 0.5.0)
+    io-console (0.8.0)
+    irb (1.15.2)
+      pp (>= 0.6.0)
+      rdoc (>= 4.0.0)
+      reline (>= 0.4.2)
     json (2.12.2)
     json-schema (5.1.1)
       addressable (~> 2.8)
@@ -43,13 +54,24 @@ GEM
     parser (3.3.8.0)
       ast (~> 2.4.1)
       racc
+    pp (0.6.2)
+      prettyprint
     pragmatic_segmenter (0.3.24)
+    prettyprint (0.2.0)
     prism (1.4.0)
+    psych (5.2.6)
+      date
+      stringio
     public_suffix (6.0.2)
     racc (1.8.1)
     rainbow (3.1.1)
     rake (13.3.0)
+    rdoc (6.14.0)
+      erb
+      psych (>= 4.0.0)
     regexp_parser (2.10.0)
+    reline (0.6.1)
+      io-console (~> 0.5)
     rspec (3.13.1)
       rspec-core (~> 3.13.0)
       rspec-expectations (~> 3.13.0)
@@ -79,6 +101,7 @@ GEM
       prism (~> 1.4)
     ruby-progressbar (1.13.0)
     sqlite3 (2.6.0-arm64-darwin)
+    stringio (3.1.7)
     unicode-display_width (3.1.4)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
@@ -89,6 +112,8 @@ PLATFORMS
   arm64-darwin
 
 DEPENDENCIES
+  debug
+  dotenv
   faraday
   langchainrb
   rag_embeddings!

@@ -18,6 +18,7 @@
 - Embedding + text storage in SQLite (BLOB)
 - Retrieve top-K most similar texts to a query using cosine similarity
 - Memory-safe and 100% Ruby compatible
+- ⭐️ Efficient variable-width allocation with embeddable typed data for compact memory usage
 - Plug-and-play for RAG, semantic search, and retrieval AI
 
 ---
@@ -184,7 +185,7 @@ The library uses a **hybrid memory-storage approach**:
 
 1. **In-Memory Processing**: All vector operations (cosine similarity calculations, embedding manipulations) happen entirely in memory using optimized C code
 2. **Persistent Storage**: SQLite serves as a simple, portable storage layer for embeddings and associated text
-3. **Dynamic C Objects**: Embeddings are managed as native C structures with automatic memory management
+3. **Dynamic C Objects**: Embeddings are managed as native C structures with automatic memory management using variable-width allocation for each vector
 
 ### Key Components
 

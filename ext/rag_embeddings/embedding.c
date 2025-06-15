@@ -11,11 +11,6 @@ typedef struct {
 } embedding_t;
 
 // Callback for freeing memory when Ruby's GC collects our object
-static void embedding_free(void *ptr) {
-  if (ptr) {
-    xfree(ptr);       // Ruby's memory free function (with null check)
-  }
-}
 
 // Callback to report memory usage to Ruby's GC
 static size_t embedding_memsize(const void *ptr) {
@@ -27,9 +22,9 @@ static size_t embedding_memsize(const void *ptr) {
 // Tells Ruby how to manage our C data structure
 static const rb_data_type_t embedding_type = {
   "RagEmbeddings/Embedding",               // Type name
-  {0, embedding_free, embedding_memsize,}, // Functions: mark, free, size
+  {0, 0, embedding_memsize,},              // No free needed when embedded
   0, 0,                                    // Parent type, data
-  RUBY_TYPED_FREE_IMMEDIATELY              // Flags for immediate cleanup
+  RUBY_TYPED_FREE_IMMEDIATELY | RUBY_TYPED_EMBEDDABLE
 };
 
 // Class method: RagEmbeddings::Embedding.from_array([1.0, 2.0, ...])
@@ -51,8 +46,10 @@ static VALUE embedding_from_array(VALUE klass, VALUE rb_array) {
 
   uint16_t dim = (uint16_t)array_len;
 
-  // Allocate memory for struct + array of floats
-  embedding_t *ptr = xmalloc(sizeof(embedding_t) + dim * sizeof(float));
+  // Allocate Ruby object with embedded memory for the vector
+  size_t total = sizeof(embedding_t) + dim * sizeof(float);
+  VALUE obj = rb_data_typed_object_zalloc(klass, total, &embedding_type);
+  embedding_t *ptr = (embedding_t *)RTYPEDDATA_GET_DATA(obj);
   ptr->dim = dim;
 
   // Copy values from Ruby array to our C array
@@ -63,15 +60,13 @@ static VALUE embedding_from_array(VALUE klass, VALUE rb_array) {
 
     // Ensure the value is numeric
     if (!RB_FLOAT_TYPE_P(val) && !RB_INTEGER_TYPE_P(val)) {
-      xfree(ptr);  // Clean up allocated memory before raising exception
       rb_raise(rb_eTypeError, "Array element at index %d is not numeric", i);
     }
 
     ptr->values[i] = (float)NUM2DBL(val);
   }
 
-  // Wrap our C struct in a Ruby object
-  VALUE obj = TypedData_Wrap_Struct(klass, &embedding_type, ptr);
+  // obj already wraps the allocated memory
   return obj;
 }
 

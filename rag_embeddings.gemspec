@@ -18,6 +18,8 @@ Gem::Specification.new do |spec|
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/marcomd/rag_embeddings"
 
+  spec.required_ruby_version = '>= 3.3'
+
   spec.add_runtime_dependency "sqlite3"
   spec.add_runtime_dependency "langchainrb"
   spec.add_runtime_dependency "faraday"

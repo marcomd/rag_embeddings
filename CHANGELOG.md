@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v0.2.2 15/06/2025 - Minor fixes and improvements
+
+- rake compile now remove all previous compiled files before compiling. 
+  This forced the reuse of previously compiled code and some changes were not applied.
+  Now it ensures a clean compile every time.
 - spec/rag_embeddings_spec.rb now by default uses stubbed embeddings for testing
 - added dotenv and debug gems to the development dependencies
 

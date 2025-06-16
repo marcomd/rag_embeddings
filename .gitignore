@@ -9,4 +9,5 @@ mkmf.log
 *.gem
 *.db
 .env
+/target
 /ext/rag_embeddings/embedding.bundle*

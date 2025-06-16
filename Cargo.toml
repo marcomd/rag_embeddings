@@ -1,0 +1,28 @@
+[package]
+name = "rag_embeddings"
+version = "0.3.0"
+edition = "2024"
+authors = ["Marco Mastrodonato <m.mastrodonato@gmail.com>"]
+description = "Fast embedding operations for Ruby using Rust"
+license = "MIT"
+repository = "https://github.com/marcomd/rag_embeddings"
+
+[lib]
+name = "embedding"
+path = "ext/rag_embeddings/embedding.rs"
+crate-type = ["cdylib"]
+
+[dependencies]
+magnus = "0.6"
+magnus-macros = "0.6"
+
+#[dependencies.magnus]
+#version = "0.6"
+#features = ["rb-sys-interop"]
+
+# Optional: for better performance
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"

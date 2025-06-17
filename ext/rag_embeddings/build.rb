@@ -58,15 +58,16 @@ class EmbeddingBuilder
   end
 
   def clean
-    puts "🧹 Cleaning build artifacts..."
-
-    # Clean Rust artifacts
+    puts "🧹 Cleaning Rust artifacts..."
     system('cargo clean') if File.exist?('Cargo.toml')
 
     # Clean C artifacts
+    puts "🧹 Cleaning C artifacts..."
     FileUtils.rm_f(['Makefile', 'mkmf.log'])
     FileUtils.rm_rf(Dir.glob('*.{o,so,dylib,dll,bundle,bundle.*}'))
     FileUtils.rm_rf(['target/'])
+
+    puts "✅ Cleaned"
   end
 
   def build
@@ -77,7 +78,6 @@ class EmbeddingBuilder
       build_c || exit(1)
     when 'clean'
       clean
-      puts "✅ Cleaned"
     else
       # Auto-detect and build
       if rust_available?

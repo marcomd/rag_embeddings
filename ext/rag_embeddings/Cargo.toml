@@ -9,12 +9,11 @@ repository = "https://github.com/marcomd/rag_embeddings"
 
 [lib]
 name = "embedding"
-path = "ext/rag_embeddings/embedding.rs"
+path = "embedding.rs"
 crate-type = ["cdylib"]
 
 [dependencies]
-magnus = "0.6"
-magnus-macros = "0.6"
+magnus = "0.6.4"
 
 #[dependencies.magnus]
 #version = "0.6"

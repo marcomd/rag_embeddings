@@ -1,2 +1,4 @@
 require "mkmf"
-create_makefile("rag_embeddings/embedding")
+require "rb_sys/mkmf"
+
+create_rust_makefile("rag_embeddings/embedding")

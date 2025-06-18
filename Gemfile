@@ -13,3 +13,5 @@ gem "faraday"
 gem "rspec"
 gem "dotenv", require: false
 gem "debug"
+gem "rb_sys", "~> 0.9"
+gem "rake-compiler", "~> 1.2"

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'mkmf'
+require "rb_sys/mkmf"
 
 # Check if Rust toolchain is available
 def rust_available?
@@ -9,7 +10,6 @@ end
 
 # Main build logic
 if rust_available?
-  require "rb_sys/mkmf"
   puts "🔧 Rust toolchain detected, building Rust extension..."
   create_rust_makefile("rag_embeddings/embedding")
 else
